@@ -9,6 +9,7 @@ class LoginPage(BasePage):
         self.should_be_register_form()
 
     def should_be_login_url(self):
+        # проверка: наличие необходимой подстроки в текущем урле
         assert "/login/" in self.browser.current_url, "Login page is not displayed!"
 
     def should_be_login_form(self):
