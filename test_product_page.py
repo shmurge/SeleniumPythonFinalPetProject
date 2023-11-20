@@ -1,4 +1,5 @@
 import pytest
+from .pages.base_page import BasePage
 from .pages.product_page import ProductPage
 from time import sleep
 
@@ -10,8 +11,8 @@ from time import sleep
 def test_guest_can_add_product_to_basket(browser, link):
     link = link
     page = ProductPage(browser, link)
-    page.open()
-    page.add_item_to_basket()
+    page.open() # открываем страницу
+    page.add_item_to_basket() # добавляем товар в корзину
     page.solve_quiz_and_get_code() # запускаем функцию для расчета значения из всплывающего алерта
     page.check_allert_after_adding_item_in_basket() # проверка наличия алерта о добавлении товара в корзину
     page.check_name_and_price_of_item_in_basket() # проверка цены и наименования товара после добавления в корзину
@@ -32,10 +33,47 @@ def test_guest_can_add_product_to_basket(browser, link):
 def test_guest_can_add_any_products_to_basket(browser, link):
     link = link
     page = ProductPage(browser, link)
-    page.open()
-    page.add_item_to_basket()
+    page.open() # открываем страницу
+    page.add_item_to_basket() # добавляем товар в корзину
     page.solve_quiz_and_get_code() # запускаем функцию для расчета значения из всплывающего алерта
     page.check_allert_after_adding_item_in_basket() # проверка наличия алерта о добавлении товара в корзину
     page.check_name_and_price_of_item_in_basket() # проверка цены и наименования товара после добавления в корзину
 
+@pytest.mark.xfail
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
+    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+    page = ProductPage(browser, link)
+    page.open() # открываем страницу
+    page.add_item_to_basket()  # добавляем товар в корзину
+    page.solve_quiz_and_get_code()  # запускаем функцию для расчета значения из всплывающего алерта
+    page.should_not_be_success_message() # проверяем, что нет сообщения об успешном добавлении товара в корзину
 
+
+def test_guest_cant_see_success_message(browser):
+    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+    page = ProductPage(browser, link)
+    page.open() # открываем страницу
+    page.should_not_be_success_message() # проверяем, что нет сообщения об успешном добавлении товара в корзину
+
+@pytest.mark.xfail
+def test_message_disappeared_after_adding_product_to_basket(browser):
+    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+    page = ProductPage(browser, link)
+    page.open() # открываем страницу
+    page.add_item_to_basket()  # добавляем товар в корзину
+    page.solve_quiz_and_get_code()  # запускаем функцию для расчета значения из всплывающего алерта
+    page.should_disappear_from_the_page() # проверяем, что сообщение об успешном добавлении товара в корзину исчезает с дисплемя
+
+
+def test_guest_should_see_login_link_on_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_login_link()
+
+
+def test_guest_can_go_to_login_page_from_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser, link)
+    page.open()
+    page.go_to_login_page()
