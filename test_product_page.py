@@ -1,7 +1,34 @@
 import pytest
 from .pages.product_page import ProductPage
 from .pages.basket_page import BasketPage
-from time import sleep
+from .pages.login_page import LoginPage
+import time
+
+@pytest.mark.smoke
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="class", autouse=True) # регистрирует пользователя и проверяет, что он залогинен
+    def setup(self, browser):
+        email = str(time.time()) + "@wiroute.com" # генерирует рандомный емейл
+        password = "123Qwerty&"
+        link = "http://selenium1py.pythonanywhere.com/en-gb/accounts/login/"
+        page = LoginPage(browser, link)
+        page.open()
+        page.register_new_user(email, password) # регистрация нового юзера
+        page.should_be_authorized_user() # проверка, что юзер авторизован
+
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+        page = ProductPage(browser, link)
+        page.open()  # открываем страницу
+        page.should_not_be_success_message()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+        page = ProductPage(browser, link)
+        page.open()  # открываем страницу
+        page.add_item_to_basket()  # добавляем товар в корзину
+        page.check_allert_after_adding_item_in_basket()  # проверка наличия алерта о добавлении товара в корзину
+        page.check_name_and_price_of_item_in_basket()  # проверка цены и наименования товара после добавления в корзину
 
 
 @pytest.mark.parametrize('link',
