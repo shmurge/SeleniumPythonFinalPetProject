@@ -5,7 +5,9 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from .locators import BasePageLocators
+from .locators import BasketPageLocators
 import math
+from time import sleep
 
 
 class BasePage():
@@ -19,6 +21,9 @@ class BasePage():
         login_link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
         login_link.click()
 
+    def go_to_basket_page(self):
+        view_basket_button = self.browser.find_element(*BasePageLocators.VIEW_BASKET_BUTTON)
+        view_basket_button.click()
 
     def is_element_present(self, how, what):
         try:

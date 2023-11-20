@@ -1,6 +1,7 @@
 from .base_page import BasePage
 from .locators import ProductPageLocators
 
+
 class ProductPage(BasePage):
     def add_item_to_basket(self):
         self.browser.implicitly_wait(5)
@@ -8,6 +9,7 @@ class ProductPage(BasePage):
         button.click()
 
     def check_allert_after_adding_item_in_basket(self):
+        self.browser.implicitly_wait(5)
         assert self.is_element_present(*ProductPageLocators.ITEM_ADDED_MESSAGE), \
             "Test failed: The message about adding an item to basket is not displayed!"
 

@@ -1,8 +1,7 @@
 import pytest
-from .pages.base_page import BasePage
 from .pages.product_page import ProductPage
+from .pages.basket_page import BasketPage
 from time import sleep
-
 
 
 @pytest.mark.parametrize('link',
@@ -39,6 +38,7 @@ def test_guest_can_add_any_products_to_basket(browser, link):
     page.check_allert_after_adding_item_in_basket() # проверка наличия алерта о добавлении товара в корзину
     page.check_name_and_price_of_item_in_basket() # проверка цены и наименования товара после добавления в корзину
 
+
 @pytest.mark.xfail
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
@@ -54,6 +54,7 @@ def test_guest_cant_see_success_message(browser):
     page = ProductPage(browser, link)
     page.open() # открываем страницу
     page.should_not_be_success_message() # проверяем, что нет сообщения об успешном добавлении товара в корзину
+
 
 @pytest.mark.xfail
 def test_message_disappeared_after_adding_product_to_basket(browser):
@@ -77,3 +78,12 @@ def test_guest_can_go_to_login_page_from_product_page(browser):
     page = ProductPage(browser, link)
     page.open()
     page.go_to_login_page()
+
+def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser, link)
+    page.open()
+    page.go_to_basket_page()
+    page = BasketPage(browser, browser.current_url)
+    page.should_not_be_items_in_the_basket()
+    page.should_be_a_message_that_the_basket_is_empty()
