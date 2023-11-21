@@ -61,6 +61,7 @@ def test_guest_can_add_product_to_basket(browser, link):
                                       marks=pytest.mark.xfail),
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
+@pytest.mark.need_review
 def test_guest_can_add_any_products_to_basket_promo(browser, link):
     # промо акция (гость может добавить товары в корзину)
     link = link
